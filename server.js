@@ -1,13 +1,29 @@
-const express = require('express');
-const app = express();
-const PORT = 3000;
+ 
+require("dotenv").config();
+const express = require("express");
+const mongoose = require("mongoose");
 
-// Define the /ping route
-app.get('/ping', (req, res) => {
-    res.send('pong');
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+app.use(express.json())
+
+// MongoDB Connection
+mongoose
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB connection error:", err));
+
+// Check Database Connection Status
+app.get("/", (req, res) => {
+  const dbStatus = mongoose.connection.readyState === 1 ? "Connected" : "Disconnected";
+  res.json({ database: dbStatus });
 });
 
-// Start the server
+// Start Server
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on port http://localhost:${PORT}`);
 });

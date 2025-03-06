@@ -1,6 +1,7 @@
-const express = require("express");
+import express from "express";
+import Item from "./models/Item.js"; // Ensure the correct path
+
 const router = express.Router();
-const Item = require("./models/Item"); // Ensure you have a Mongoose model for your data
 
 // Create (POST)
 router.post("/items", async (req, res) => {
@@ -56,4 +57,4 @@ router.delete("/items/:id", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router; // ✅ Correct export for ES Modules

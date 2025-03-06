@@ -1,44 +1,31 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const routes = require("./routes"); // Import CRUD routes
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";
+import routes from "./routes.js"; // ✅ Correct import for ES Modules
+
+dotenv.config();
 
 const app = express();
+app.use(express.json());
+app.use(cors());
+app.use("/api", routes); // ✅ Mount routes correctly
+
 const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI;
 
-// Middleware
-app.use(express.json()); // Parses incoming JSON requests
-app.use("/api", routes); // Uses CRUD routes
-
-// MongoDB Connection
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log("✅ Connected to MongoDB");
+    await mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    console.log("✅ MongoDB connected successfully");
   } catch (error) {
     console.error("❌ MongoDB Connection Error:", error);
+    process.exit(1);
   }
 };
 
 connectDB();
 
-// Handle MongoDB connection status dynamically
-mongoose.connection.on("connected", () => console.log("✅ MongoDB Connected"));
-mongoose.connection.on("error", (err) => console.error("❌ MongoDB Error:", err));
-mongoose.connection.on("disconnected", () => console.log("⚠️ MongoDB Disconnected"));
-
-// Check Database Connection Status
-app.get("/", (req, res) => {
-  const status = mongoose.connection.readyState;
-  const dbStatus = status === 1 ? "Connected" : "Disconnected";
-  console.log(`🔍 DB Status: ${dbStatus}`);
-  res.json({ database: dbStatus });
-});
-
-// Start Server
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });

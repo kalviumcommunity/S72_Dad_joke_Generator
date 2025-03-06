@@ -62,7 +62,7 @@ The **Dad Joke Generator** is an ideal project for several reasons:
 - Implementing a feature for users to submit their own jokes encourages creativity. Developers can also customize the app’s design, features, and user experience to make it unique.
 
 ---
-Render link-https://s72-dad-joke-generator.onrender.com
+Render link-https://s72-dad-joke-generator-wbu4.onrender.com
 
 
 Enjoy the humor and keep sharing the laughs! 😄
